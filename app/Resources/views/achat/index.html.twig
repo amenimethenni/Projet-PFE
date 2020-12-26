@@ -1,0 +1,203 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('js/plugins/data-tables/css/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+{% endblock %}
+
+{% block content %}
+
+<!-- START CONTENT -->
+<section id="content">
+
+        <!--breadcrumbs start-->
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen -->
+            <div class="header-search-wrapper grey hide-on-large-only">
+                <i class="mdi-action-search active"></i>
+                <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <h5 class="breadcrumbs-title">les achats</h5>
+                        <ol class="breadcrumbs">
+                            <li><a href="{{ path('achat_index') }}">Liste des achats</a></li>
+                            
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--breadcrumbs end-->  
+
+        <!--start container-->
+        <div class="container">
+
+            <!-- Compose Email Trigger -->
+            <div class="fixed-action-btn" style="top: 120px; right: 24px;">
+                <a class="btn-floating btn-large cyan" href="#" id="bouttonRecherche">
+                    <i class="large mdi-action-find-in-page"></i>
+                </a>
+            </div>
+            <div class="row" id="cadreRecherche" style="display: none">
+                <br>
+                <div class="col s1">&nbsp;</div>  
+                <div class="col s10">    
+                    <div class="row cadreSaisie">
+                        <div class="row">
+                            <div class="facture_titre">Recherche</div>
+                            <form id="formRecherche" method="post" action="{{ path('achat_index') }}">
+                                <div class="row">
+                                    <div class="col s1">&nbsp;</div>
+                                    <div class="input-field col s5">
+                                        {{ form_widget(recherche.dateDe) }}
+                                    </div>
+                                    <div class="input-field col s5">
+                                        {{ form_widget(recherche.dateA) }}
+                                    </div>
+                                    
+                                    <div class="col s1">&nbsp;</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s1">&nbsp;</div>
+                                    <div class="input-field col s3">
+                                        {{ form_widget(recherche.factured) }}
+                                        <label for="gestionachatsFondDeRoulement_achat_factured">Facturés</label>
+                                    </div>
+                                    <div class="input-field col s3">
+                                        {{ form_widget(recherche.notFactured) }}
+                                        <label for="gestionachatsFondDeRoulement_achat_notFactured">Non facturés</label>
+                                    </div>
+                                    <div class="input-field col s2">
+                                        {{ form_widget(recherche.renouvele) }}
+                                        <label for="gestionachatsFondDeRoulement_achat_renouvele">Renouvelés</label>
+                                    </div>
+                                    <div class="input-field col s3">
+                                        {{ form_widget(recherche.nonRenouvle) }}
+                                        <label for="gestionachatsFondDeRoulement_achat_nonRenouvle">Non renouvelés</label>
+                                    </div>
+                                    <div class="col s1">&nbsp;</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s1">&nbsp;</div>
+                                    <div class="col s10">
+                                         <button class="btn red waves-effect waves-light right" type="submit">Rechercher</button>   
+                                    </div>
+                                    <div class="col s1">&nbsp;</div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="row">    
+                    <div class="col s1">&nbsp;</div>  
+                    <div class="col s10"> 
+                       
+                    </div>
+                    <div class="col s1">&nbsp;</div>  
+                </div>
+
+                <div class="row">&nbsp;</div> 
+
+                <div class="row">
+                    <div class="col s1">&nbsp;</div>  
+                    <div class="col s10">    
+                        <div class="row cadreSaisie">
+                            <div id="table-datatables">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <form method="post" id="form" action="{{ path('renouvellement_new') }}">
+                                        <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <input type="checkbox" name="checkAll" class="filled-in" id="checkAll" />
+                                                        <label for="checkAll">&nbsp</label>
+                                                    </th>
+                                                    <th>N°</th>
+                                                    <th>Date achat</th>
+                                                    <th>Montant facture TTC</th>          
+                                                    <th>Facturé</th>
+                                                    <th>Renouvelé</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                            
+                                            {% for achat in achats %}                                   
+                                            <tr>
+                                                <td>
+                                                    {% if achat.achat.facture is not null and achat.achat.renouvellement is null %}
+                                                    <input  type="checkbox" 
+                                                            class="filled-in" 
+                                                            name="check{{ loop.index }}" 
+                                                            id="check{{ loop.index }}"
+                                                            value="{{ achat.achat.id }}" />
+                                                    <label for="check{{ loop.index }}">&nbsp</label>
+                                                    {% endif %}
+                                                </td>
+                                                <td><a href="{{ path('achat_show', { 'id': achat.achat.id }) }}">{{ achat.achat.id }}
+                                                </a></td>  
+                                                <td>{{ achat.achat.dateAchat|date('d-m-Y') }}</td>
+                                                <td>{{ achat.total|number_format(3,',','','') }}</td>
+                                                <td>
+                                                    {% if achat.achat.facture is not null %}<i class="mdi-action-done"></i>{% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if achat.achat.renouvellement is not null %}<i class="mdi-action-done"></i>{% endif %}
+                                                </td>
+                                            </tr>                                                 
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                                <th colspan="7">
+                                                    <button class="waves-effect waves-light btn" type="submit">Valider</button>
+                                                </th>
+                                            </tfoot>
+                                        </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>            
+                        </div>
+                    </div>      
+                    <div class="col s1">&nbsp;</div>  
+                </div>
+            </div>      
+        </div>  
+        
+{% endblock %}                                            
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/js/jquery.dataTables.min.js') }}"></script>></script>
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/data-tables-script.js') }}"></script>></script>
+
+    <script type="text/javascript">
+        $(document).on('click','#Valider',function(){
+            $('#form').submit();
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).on('click','#bouttonRecherche',function(e) {
+            e.preventDefault();
+
+            if($("#cadreRecherche").is(":visible"))
+                $("#cadreRecherche").hide();
+            else
+                $("#cadreRecherche").show();
+            return false;
+        });
+            
+        $(document).on('click','#submitRecherche',function(e) {
+            $('#formRecherche').submit();
+        });
+
+    </script>
+{% endblock %}
+
+            
+   
+

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+        {% block stylesheets %}
+        <!-- CORE CSS-->
+        <link href="{{ asset('css/materialize.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="{{ asset('css/style.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="{{ asset('css/styleBookAndJoy.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <!-- Custome CSS-->    
+        <link href="{{ asset('css/custom/custom.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+
+        <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
+        <link href="{{ asset('js/plugins/prism/prism.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="{{ asset('js/plugins/perfect-scrollbar/perfect-scrollbar.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="{{ asset('js/plugins/chartist-js/chartist.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+
+
+        {% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+
+        <!-- Start Page Loading -->
+        <div id="loader-wrapper">
+            <div id="loader"></div>        
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+        </div>
+        <!-- End Page Loading -->
+
+        {% block header %}
+        <!-- START HEADER -->
+        <header id="header" class="page-topbar">
+            <!-- start header nav-->
+            <div class="navbar-fixed">
+                <nav class="navbar-color light-blue darken-3">
+                    <div class="nav-wrapper">
+                        <ul class="left grey lighten-5">                      
+                            <li><h1 class="logo-wrapper"><a href="#" class="brand-logo">TRANSTU</a><span class="logo-text">Materialize</span></h1></li>
+                        </ul>
+                        <ul class="right hide-on-med-and-down">
+                                <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="mdi-action-settings-overscan"></i></a>
+                                </li>
+                                
+                                </li>                        
+                                
+                        </ul>
+                        <!-- translation-button -->
+                        <ul id="translation-dropdown" class="dropdown-content">
+                              <li>
+                                <a href="#!"><img src="{{ asset('images/flag-icons/United-States.png') }}" alt="English" />  <span class="language-select">English</span></a>
+                              </li>
+                              <li>
+                                <a href="#!"><img src="{{ asset('images/flag-icons/France.png') }}" alt="French" />  <span class="language-select">French</span></a>
+                              </li>
+                              <li>
+                                <a href="#!"><img src="{{ asset('images/flag-icons/China.png') }}" alt="Chinese" />  <span class="language-select">Chinese</span></a>
+                              </li>
+                              <li>
+                                <a href="#!"><img src="{{ asset('images/flag-icons/Germany.png') }}" alt="German" />  <span class="language-select">German</span></a>
+                              </li>
+                          
+                        </ul>
+                        <!-- notifications-dropdown -->
+                        <ul id="notifications-dropdown" class="dropdown-content">
+                              <li>
+                                    <h5>NOTIFICATIONS <span class="new badge">5</span></h5>
+                              </li>
+                              <li class="divider"></li>
+                              <li>
+                                    <a href="#!"><i class="mdi-action-add-shopping-cart"></i> A new order has been placed!</a>
+                                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">2 hours ago</time>
+                              </li>
+                              <li>
+                                    <a href="#!"><i class="mdi-action-stars"></i> Completed the task</a>
+                                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">3 days ago</time>
+                              </li>
+                              <li>
+                                    <a href="#!"><i class="mdi-action-settings"></i> Settings updated</a>
+                                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">4 days ago</time>
+                              </li>
+                              <li>
+                                    <a href="#!"><i class="mdi-editor-insert-invitation"></i> Director meeting started</a>
+                                    <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">6 days ago</time>
+                              </li>
+                              <li>
+                                    <a href="#!"><i class="mdi-action-trending-up"></i> Generate monthly report</a>
+                                    <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">1 week ago</time>
+                              </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <!-- end header nav-->
+        </header>
+        <!-- END HEADER -->
+        {% endblock %}
+
+        <!-- START MAIN -->
+        <div id="main">
+            <!-- START WRAPPER -->
+            <div class="wrapper">
+
+            {% block leftSidebarNav %}
+            <!-- START LEFT SIDEBAR NAV-->
+            <aside id="left-sidebar-nav">
+                <ul id="slide-out" class="side-nav fixed leftside-navigation">
+                    <li class="user-details cyan darken-2">
+                        <div class="row">
+                            <!-- <div class="col col s4 m4 l4">
+                                <img src="{{ asset('images/avatar.jpg') }}" alt="" class="circle responsive-img valign profile-image">
+                            </div> -->
+                            <div class="col col s12 m12 l12">
+                                <ul id="profile-dropdown" class="dropdown-content">
+                                    <li><a href="{{ path('fos_user_change_password') }}"><i class="mdi-action-settings"></i>Mot&nbsp;de&nbsp;passe</a></li>
+                                    <li><a href="{{ path('fos_user_security_logout') }}"><i class="mdi-hardware-keyboard-tab"></i>Déconnexion</a></li>
+                                </ul>
+                                <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown">{{ app.user.username }}<i class="mdi-navigation-arrow-drop-down right"></i></a>
+                                <p class="user-roal">{{ app.user.unite.libelle }}</p>
+                                <p class="user-roal">{{ app.user.profil.libelle }}</p>
+                            </div>
+                        </div>
+                    </li>
+
+                    {% block menu_principal %}
+                        {% include "menu_principal.html.twig" %}
+                    {% endblock %}
+                </ul>
+                <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="mdi-navigation-menu"></i></a>
+            </aside>
+            <!-- END LEFT SIDEBAR NAV-->
+            {% endblock %}
+
+            {% block content %}
+            test
+            {% endblock %}   
+
+            {% block rightSideNav %}            
+            <!-- START RIGHT SIDEBAR NAV-->
+            <aside id="right-sidebar-nav">
+                <ul id="chat-out" class="side-nav rightside-navigation">
+                    <li class="li-hover">
+                    <a href="#" data-activates="chat-out" class="chat-close-collapse right"><i class="mdi-navigation-close"></i></a>
+                    <div id="right-search" class="row">
+                        <form class="col s12">
+                            <div class="input-field">
+                                <i class="mdi-action-search prefix"></i>
+                                <input id="icon_prefix" type="text" class="validate">
+                                <label for="icon_prefix">Search</label>
+                            </div>
+                        </form>
+                    </div>
+                    </li>
+                    <li class="li-hover">
+                        <ul class="chat-collapsible" data-collapsible="expandable">
+                        <li>
+                            <div class="collapsible-header teal white-text active"><i class="mdi-social-whatshot"></i>Recent Activity</div>
+                            <div class="collapsible-body recent-activity">
+                                <div class="recent-activity-list chat-out-list row">
+                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-add-shopping-cart"></i>
+                                    </div>
+                                    <div class="col s9 recent-activity-list-text">
+                                        <a href="#">just now</a>
+                                        <p>Jim Doe Purchased new equipments for zonal office.</p>
+                                    </div>
+                                </div>
+                                <div class="recent-activity-list chat-out-list row">
+                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-device-airplanemode-on"></i>
+                                    </div>
+                                    <div class="col s9 recent-activity-list-text">
+                                        <a href="#">Yesterday</a>
+                                        <p>Your Next flight for USA will be on 15th August 2015.</p>
+                                    </div>
+                                </div>
+                                <div class="recent-activity-list chat-out-list row">
+                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-settings-voice"></i>
+                                    </div>
+                                    <div class="col s9 recent-activity-list-text">
+                                        <a href="#">5 Days Ago</a>
+                                        <p>Natalya Parker Send you a voice mail for next conference.</p>
+                                    </div>
+                                </div>
+                                <div class="recent-activity-list chat-out-list row">
+                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-store"></i>
+                                    </div>
+                                    <div class="col s9 recent-activity-list-text">
+                                        <a href="#">Last Week</a>
+                                        <p>Jessy Jay open a new store at S.G Road.</p>
+                                    </div>
+                                </div>
+                                <div class="recent-activity-list chat-out-list row">
+                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-settings-voice"></i>
+                                    </div>
+                                    <div class="col s9 recent-activity-list-text">
+                                        <a href="#">5 Days Ago</a>
+                                        <p>Natalya Parker Send you a voice mail for next conference.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header light-blue white-text active"><i class="mdi-editor-attach-money"></i>Sales Repoart</div>
+                            <div class="collapsible-body sales-repoart">
+                                <div class="sales-repoart-list  chat-out-list row">
+                                    <div class="col s8">Target Salse</div>
+                                    <div class="col s4"><span id="sales-line-1"></span>
+                                    </div>
+                                </div>
+                                <div class="sales-repoart-list chat-out-list row">
+                                    <div class="col s8">Payment Due</div>
+                                    <div class="col s4"><span id="sales-bar-1"></span>
+                                    </div>
+                                </div>
+                                <div class="sales-repoart-list chat-out-list row">
+                                    <div class="col s8">Total Delivery</div>
+                                    <div class="col s4"><span id="sales-line-2"></span>
+                                    </div>
+                                </div>
+                                <div class="sales-repoart-list chat-out-list row">
+                                    <div class="col s8">Total Progress</div>
+                                    <div class="col s4"><span id="sales-bar-2"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header red white-text"><i class="mdi-action-stars"></i>Favorite Associates</div>
+                            <div class="collapsible-body favorite-associates">
+                                <div class="favorite-associate-list chat-out-list row">
+                                    <div class="col s4"><img src="{{ asset('images/avatar.jpg') }}" alt="" class="circle responsive-img online-user valign profile-image">
+                                    </div>
+                                    <div class="col s8">
+                                        <p>Eileen Sideways</p>
+                                        <p class="place">Los Angeles, CA</p>
+                                    </div>
+                                </div>
+                                <div class="favorite-associate-list chat-out-list row">
+                                    <div class="col s4"><img src="{{ asset('images/avatar.jpg') }}" alt="" class="circle responsive-img online-user valign profile-image">
+                                    </div>
+                                    <div class="col s8">
+                                        <p>Zaham Sindil</p>
+                                        <p class="place">San Francisco, CA</p>
+                                    </div>
+                                </div>
+                                <div class="favorite-associate-list chat-out-list row">
+                                    <div class="col s4"><img src="{{ asset('images/avatar.jpg') }}" alt="" class="circle responsive-img offline-user valign profile-image">
+                                    </div>
+                                    <div class="col s8">
+                                        <p>Renov Leongal</p>
+                                        <p class="place">Cebu City, Philippines</p>
+                                    </div>
+                                </div>
+                                <div class="favorite-associate-list chat-out-list row">
+                                    <div class="col s4"><img src="{{ asset('images/avatar.jpg') }}" alt="" class="circle responsive-img online-user valign profile-image">
+                                    </div>
+                                    <div class="col s8">
+                                        <p>Weno Carasbong</p>
+                                        <p>Tokyo, Japan</p>
+                                    </div>
+                                </div>
+                                <div class="favorite-associate-list chat-out-list row">
+                                    <div class="col s4"><img src="{{ asset('images/avatar.jpg') }}" alt="" class="circle responsive-img offline-user valign profile-image">
+                                    </div>
+                                    <div class="col s8">
+                                        <p>Nusja Nawancali</p>
+                                        <p class="place">Bangkok, Thailand</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        </ul>
+                    </li>
+                </ul>
+            </aside>
+            <!-- LEFT RIGHT SIDEBAR NAV-->
+            {% endblock %}
+
+            {% block footer %}
+            <!-- START FOOTER -->
+        
+            <!-- END FOOTER -->
+            {% endblock %}
+
+            </div>
+        </div>        
+
+        {% block javascripts %}
+        <!-- jQuery Library -->
+        <script type="text/javascript" src="{{ asset('js/plugins/jquery-1.11.2.min.js') }}"></script>    
+        <!--materialize js-->
+        <script type="text/javascript" src="{{ asset('js/materialize.js') }}"></script>
+        <!--prism
+        <script type="text/javascript" src="js/prism/prism.js"></script>-->
+        <!--scrollbar-->
+        <script type="text/javascript" src="{{ asset('js/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+        <!-- chartist -->
+        <script type="text/javascript" src="{{ asset('js/plugins/chartist-js/chartist.min.js') }}"></script>   
+        
+        <!--plugins.js - Some Specific JS codes for Plugin Settings-->
+        <script type="text/javascript" src="{{ asset('js/plugins.js') }}"></script>
+        <!--custom-script.js - Add your own theme custom JS-->
+        <script type="text/javascript" src="{{ asset('js/custom-script.js') }}"></script>
+
+        <script src="{{ asset('Inputmask/dist/inputmask/inputmask.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/inputmask.extensions.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/inputmask.numeric.extensions.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/inputmask.date.extensions.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/inputmask.phone.extensions.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/jquery.inputmask.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/phone-codes/phone.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/phone-codes/phone-be.js') }}"></script>
+        <script src="{{ asset('Inputmask/dist/inputmask/phone-codes/phone-ru.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                switch('<%= GetDateFormat() %>'){
+                    case 'mm/dd/yy':  
+                        $('.dateMask').inputmask('yyyy/mm/dd');break;
+
+                    default:
+                        $('.dateMask').inputmask('yyyy/mm/dd');
+                }
+
+            });
+        </script>
+        {% endblock %}
+    </body>
+</html>

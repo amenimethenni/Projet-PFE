@@ -1,0 +1,357 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <!-- START CONTENT -->
+    <section id="content">
+        
+        <form id="form" name="facturationbundle_facture" method="post" action="{{ path('demande_edit',{'id':demande.id}) }}">
+
+        <!--breadcrumbs start-->
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen -->
+            <div class="header-search-wrapper grey hide-on-large-only">
+                <i class="mdi-action-search active"></i>
+                <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <h5 class="breadcrumbs-title">Demande d'achat</h5>
+                        <ol class="breadcrumbs">
+                            <li><a href="{{ path('demande_index') }}">Liste des demandes d'achat</a></li>
+                            <li class="active">Modification d'une demande d'achat</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--breadcrumbs end-->
+        
+
+        <!--start container-->
+        <div class="container">
+
+            <div class="row" style="padding-bottom: 20px; padding-top: 20px;">    
+                <div class="col s1">&nbsp;</div>  
+                <div class="col s10"> 
+                    <a class="btn waves-effect waves-light " href="{{ path('demande_index') }}" name="action">
+                        Retour<i class="mdi-content-reply left"></i>
+                    </a>
+                    <a class="btn waves-effect waves-light " href="{{ path('demande_edit',{'id':demande.id}) }}" type="submit" name="action" id="enregistrer">
+                        Enregistrer<i class="mdi-content-send right"></i>
+                    </a>
+                </div>
+                <div class="col s1">&nbsp;</div>  
+            </div>
+
+            <div class="row">
+
+                <div class="col s1">&nbsp;</div> 
+                <div class="col s10"> 
+                    <div class="row cadreSaisie">
+                        <div class="facture_titre">BCN</div>
+                        <div class="row">   
+                            <div class="col s1">&nbsp;</div> 
+                            <div class="input-field col s5">
+                                {{ form_widget(form.numeroBcn) }}
+                                <label for="Adresse">Numero BCN</label>
+                                <span class="erreur erreur_numero" style="display: none">Champ obligatoire</span>
+                            </div>
+                            <div class="input-field col s5">&nbsp;</div>                            
+                            <div class="col s6">&nbsp;</div>
+                        </div>  
+                        <div class="row">   
+                            <div class="col s1">&nbsp;</div> 
+                            <div class="input-field col s5">
+                                {{ form_widget(form.dateDemande) }}
+                                <span class="erreur erreur_date" style="display: none">Champ obligatoire</span>
+                            </div>
+                            <div class="input-field col s5">
+                                {{ form_widget(form.uniteDemandeuse) }}
+                                <span class="erreur erreur_unite" style="display: none">Champ obligatoire</span>
+                            </div>                            
+                            <div class="col s6">&nbsp;</div>
+                        </div>  
+                        <div class="row">
+                            <div class="col s1">&nbsp;</div>                        
+                            <div class="input-field file-field input-field col s5">
+                                <input class="file-path validate" type="text" />
+                                {{ form_widget(form.fichierBcn) }}
+                                <label for="Adresse">Fichier BCN</label>
+                            </div>
+                            <div class="input-field col s5">
+                                {{ form_widget(form.lienBcn) }}
+                                <label for="Adresse">Lien BCN</label>
+                            </div>
+                            <div class="col s1">&nbsp;</div>
+                        </div>
+                          
+                    </div>
+                    
+
+                    <div class="row cadreSaisie_secand">
+
+                        <div class="facture_titre">Produits demandés :</div>
+
+                        
+
+                        <div class="col s12" id="ligneFactureContainer">
+                            <div>
+                                <div class="col s12">
+                                    <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                        <thead>
+                                            <tr style="background: #fff;">
+                                                <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                <th style="background: #fff;">Produit</th>
+                                                <th style="background: #fff;">Quantité</th>
+                                                <th style="background: #fff;">&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                     
+                                        <tfoot>
+                                            <tr style="background: #fff;">
+                                                <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                <th style="background: #fff;">Produit</th>
+                                                <th style="background: #fff;">Quantité</th>
+                                                <th style="background: #fff;">&nbsp;</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody class="lignes" data-prototype="{% filter escape %}
+                                                                            {{ include('gestionachatsFondDeRoulementBundle:Default:ligneDemande.html.twig', { 'ligneDemande': form.lignesDemandes.vars.prototype }) }}
+                                                                       {% endfilter %}">
+                                            {% for ligneDemande in form.lignesDemandes %}
+                                                <tr>
+                                                    <td><i class="mdi-action-view-headline" style="font-size: 20px;"></i></td>
+                                                    <td>
+                                                        {{ form_widget(ligneDemande.produit) }}
+                                                        <span class="erreur erreur_produit{{ loop.index-1 }}" style="display: none">Champ obligatoire</span>
+                                                    </td>
+                                                    <td>
+                                                        {{ form_widget(ligneDemande.qte) }}
+                                                        <span class="erreur erreur_qte{{ loop.index-1 }}" style="display: none">Champ obligatoire</span>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>   
+                                    <br>
+                                    <a class="btn-floating btn waves-effect waves-light darken-2 right add_tag_link"><i class="mdi-content-add activator"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col s1">&nbsp;</div>    
+                </div>
+
+            </div>
+
+        </div>
+        <!--end container-->
+
+        {{ form_widget(form._token) }}
+        </form>
+
+    </section>    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var $addTagLink = $('.add_tag_link');
+        //var $newLinkLi = $('.lignes').append($addTagLink);
+
+        jQuery(document).ready(function() {
+
+            $( ".quantite" ).each(function( index ) {
+                majMontantLigne(index);
+            });
+
+            // Get the ul that holds the collection of tags
+            var $collectionHolder = $('.lignes');
+            
+            // add the "add a tag" anchor and li to the tags ul
+            //$collectionHolder.append($newLinkLi);
+            
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find('tr').length);
+            
+            $addTagLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                
+                // add a new tag form (see code block below)
+                addTagForm($collectionHolder);
+            });
+
+            $(document).on('blur','.quantite',function(){
+                var name = $(this).attr('name').split("[");
+                var index  = name[2].substring(0,name[2].length-1);
+                majMontantLigne(index);
+            });   
+            $(document).on('blur','.prixUnitaire',function(){
+                var name = $(this).attr('name').split("[");
+                var index  = name[2].substring(0,name[2].length-1);
+                majMontantLigne(index);
+            });   
+            $(document).on('blur','.quantite',function(){
+                var name = $(this).attr('name').split("[");
+                var index  = name[2].substring(0,name[2].length-1);
+                majMontantLigne(index);
+            });
+
+            $(document).on('click','#enregistrer',function(){
+                
+                //  verification des champs obligatoires
+                if($("#gestion_achatsfondderoulementbundle_demande_dateDemande").val()==""){
+                    //$("#facturationbundle_facture_numeroFacture").attr("style","border-bottom:1px solid red;");
+                    $(".erreur_date").show();
+                }else{
+                    //$("#facturationbundle_facture_dateFacture").attr("style","border-bottom: 1px solid #999;");
+                    $(".erreur_date").hide();
+                }
+
+                if($("#gestion_achatsfondderoulementbundle_demande_numeroBcn").val()==""){
+                    //$("#facturationbundle_facture_numeroFacture").attr("style","border-bottom:1px solid red;");
+                    $(".erreur_numero").show();
+                }else{
+                    //$("#facturationbundle_facture_numeroFacture").attr("style","border-bottom: 1px solid #999;");
+                    $(".erreur_numero").hide();
+                }
+
+                if($("#gestion_achatsfondderoulementbundle_demande_uniteDemandeuse").val()==""){
+                    //$("#facturationbundle_facture_numeroFacture").attr("style","border-bottom:1px solid red;");
+                    $(".erreur_unite").show();
+                }else{
+                    //$("#facturationbundle_facture_numeroFacture").attr("style","border-bottom: 1px solid #999;");
+                    $(".erreur_unite").hide();
+                }
+
+                $( ".produit" ).each(function( index ) {
+                        
+                    if($("#gestion_achatsfondderoulementbundle_demande_lignesDemandes_"+index+"_produit").val()==""){
+                        $(".erreur_produit"+index).show();
+                    }else{
+                        $(".erreur_produit"+index).hide();
+                    }
+
+                });
+
+                $( ".quantite" ).each(function( index ) {
+                    //console.log(isNaN(parseFloat($("#gestion_achatsfondderoulementbundle_demande_lignesDemandes_"+index+"_qte").val())));
+                    console.log($("#gestion_achatsfondderoulementbundle_demande_lignesDemandes_"+index+"_qte").val());
+                    if(parseFloat($("#gestion_achatsfondderoulementbundle_demande_lignesDemandes_"+index+"_qte").val())==0 || isNaN(parseFloat($("#gestion_achatsfondderoulementbundle_demande_lignesDemandes_"+index+"_qte").val()))){
+                        $(".erreur_qte"+index).show();
+                    }else{
+                        $(".erreur_qte"+index).hide();
+                    }
+
+                });
+
+                $( ".prixUnitaire" ).each(function( index ) {
+                    if(parseFloat($("#gestion_achatsfondderoulementbundle_demande_lignesDemandes_"+index+"_montantEstime").val())==0 || isNaN(parseFloat($("#gestion_achatsfondderoulementbundle_demande_lignesDemandes_"+index+"_montantEstime").val()))){
+                        $(".erreur_pu"+index).show();
+                    }else{
+                        $(".erreur_pu"+index).hide();
+                    }
+
+                });
+
+                if($('.erreur:visible').length==0){
+                    $("#form").submit();
+                }
+
+            });
+            
+        });
+
+        function currencyFormat(data){
+            if( isNaN( parseFloat( data ) ) ) return 0;
+            return parseFloat(Math.round(data * 100) / 100).toFixed(2);
+        }
+
+        function majMontantLigne(index){
+            var qte = parseFloat($('#gestion_achatsfondderoulementbundle_demande_lignesDemandes_'+index+'_qte').val());
+            var pU  = parseFloat($('#gestion_achatsfondderoulementbundle_demande_lignesDemandes_'+index+'_montantEstime').val());
+            var tot = pU*qte;
+
+            $('#tot'+index).text(currencyFormat(tot));
+
+            majMontantTotal();
+        }
+
+        function majMontantTotal(){
+
+            //  total HT
+            var tot_ht = 0,
+                total = 0;
+            
+            $( ".prixUnitaire" ).each(function( index ) {
+                var name = $(this).attr('name').split("[");
+                var index  = name[2].substring(0,name[2].length-1);
+                var qte = parseFloat($('#gestion_achatsfondderoulementbundle_demande_lignesDemandes_'+index+'_qte').val());
+                var pU  = parseFloat($('#gestion_achatsfondderoulementbundle_demande_lignesDemandes_'+index+'_montantEstime').val());
+
+                if(currencyFormat($( this ).val())){
+                    tot_ht += parseFloat(currencyFormat(qte*pU));
+                }
+            });
+            total += tot_ht;
+            
+            //  Total de la facture
+            $('#totaux').html('');
+            $('#totaux').append('<div class="row">'+
+                                        '<div class="col s6"><b>Montant total </b></div>'+
+                                        '<div class="col s5"><div id="tot_ht" style="text-align : right"><b>'+currencyFormat(total)+'</b></div></div>'+
+                                        '<div class="col s1"></div>');
+        }
+
+        function addTagForm($collectionHolder) {
+            
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+            
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+            
+            // Replace '$$name$$' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+            console.log("newForm = : "+newForm);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+            
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('.lignes').append(newForm);
+            
+            
+            //$newLinkLi.before($newFormLi);
+            
+            // handle the removal, just for this example
+            $('.remove-tag').click(function(e) {
+                e.preventDefault();                
+                $(this).parent().parent().remove();
+                majMontantLigne($(this).attr("id"));
+                return false;
+            });
+        }
+    </script>
+    <script type="text/javascript" src="{{ asset('js/jquery.numeric.js') }}"></script>
+    <script type="text/javascript">
+        $(".numeric").numeric();
+        $(".integer").numeric(false, function() { alert("Integers only"); this.value = ""; this.focus(); });
+        $(".positive").numeric({ negative: false }, function() { alert("No negative values"); this.value = ""; this.focus(); });
+        $(".positive-integer").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });
+        $(".decimal-2-places").numeric({ decimalPlaces: 2 });
+        $("#remove").click(
+            function(e)
+            {
+                e.preventDefault();
+                $(".numeric,.integer,.positive,.positive-integer,.decimal-2-places").removeNumeric();
+            }
+        );
+    </script>
+
+{% endblock %}

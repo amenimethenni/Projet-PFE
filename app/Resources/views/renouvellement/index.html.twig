@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('js/plugins/data-tables/css/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+{% endblock %}
+
+{% block content %}
+
+    <!-- START CONTENT -->
+    <section id="content">
+
+            <!--breadcrumbs start-->
+            <div id="breadcrumbs-wrapper">
+                <!-- Search for small screen -->
+                <div class="header-search-wrapper grey hide-on-large-only">
+                    <i class="mdi-action-search active"></i>
+                    <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5 class="breadcrumbs-title">Liste des demandes de renouvellement</h5>
+                            <ol class="breadcrumbs">
+                                
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--breadcrumbs end--> 
+
+ <!--start container-->
+            <div class="container">
+                <div class="section">
+                    <div class="row">    
+                        <div class="col s1">&nbsp;</div>  
+                        <div class="col s10"> 
+                            
+                        </div>
+                        <div class="col s1">&nbsp;</div>  
+                    </div>
+
+                    <div class="row">&nbsp;</div> 
+
+                    <div class="row">
+                        <div class="col s1">&nbsp;</div>  
+                        <div class="col s10">    
+                            <div class="row cadreSaisie">
+                                <div id="table-datatables">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            
+                                            <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                                <thead>
+                                                    <tr>                                                        
+                                                        <th>ID</th>
+                                                        <th>Date de renouvellement </th>                                                         
+                                                        <th>Etat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for renouvellement in renouvellements %}
+                                                    <tr> 
+                                                        <td>
+                                                            <a href="{{ path('renouvellement_show', { 'id': renouvellement.id }) }}">{{ renouvellement.id }}
+                                                            </a>
+                                                        </td>    
+                                                        <td>
+                                                            {% if renouvellement.DateRenouvellement %}
+                                                            {{ renouvellement.DateRenouvellement|date('Y-m-d') }}
+                                                            {% endif %}
+                                                        </td>     
+                                                        <td>
+                                                            {% if renouvellement.etatsRenouvellements[renouvellement.etatsRenouvellements|length-1] is defined %}
+                                                                {{ renouvellement.etatsRenouvellements[renouvellement.etatsRenouvellements|length-1].etatRenouvellement.libelle }}
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            </table>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>            
+                            </div>
+                        </div>      
+                        <div class="col s1">&nbsp;</div>  
+                    </div>
+                </div>      
+            </div>
+
+            {% endblock %}      
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/js/jquery.dataTables.min.js') }}"></script>></script>
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/data-tables-script.js') }}"></script>></script>
+
+{% endblock %}

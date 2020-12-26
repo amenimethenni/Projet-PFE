@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('js/plugins/data-tables/css/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+{% endblock %}
+{% block content %}
+
+    <!-- START CONTENT -->
+    <section id="content">
+
+            <!--breadcrumbs start-->
+            <div id="breadcrumbs-wrapper">
+                <!-- Search for small screen -->
+                <div class="header-search-wrapper grey hide-on-large-only">
+                    <i class="mdi-action-search active"></i>
+                    <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5 class="breadcrumbs-title">renouvellement</h5>
+                            <ol class="breadcrumbs">
+                                <li><a href="{{ path('renouvellement_index') }}">Liste des renouvellements </a></li>
+                                <li class="active">Consultation d'un renouvellement</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--breadcrumbs end--> 
+            <!--start container-->
+            <div class="container">
+
+                {{ form_start(delete_form, {'attr': {'id': 'form_delete'}}) }}{{ form_end(delete_form) }}
+                <div class="row" style="padding: 10px">    
+                    <div class="col s1">&nbsp;</div>  
+                    <div class="col s10"> 
+                        <a class="btn waves-effect waves-light " href="{{ path('renouvellement_index') }}" name="action">Retour<i class="mdi-content-reply left"></i></a>
+                        {% if droitsMenuPrincipal['valider']=="1"and (renouvellement.EtatsRenouvellements[renouvellement.EtatsRenouvellements|length-1].etatRenouvellement.id==1 or renouvellement.EtatsRenouvellements[renouvellement.EtatsRenouvellements|length-1].etatRenouvellement.id==4) %}
+                        <a class="btn waves-effect waves-light" href="{{ path('renouvellement_valider',{'id':renouvellement.id}) }}"  name="action">
+                            Valider
+                        </a> 
+                        {% endif %}
+
+                        {% if droitsMenuPrincipal['refuser']=="1"and (renouvellement.EtatsRenouvellements[renouvellement.EtatsRenouvellements|length-1].etatRenouvellement.id==1 or renouvellement.EtatsRenouvellements[renouvellement.EtatsRenouvellements|length-1].etatRenouvellement.id==2) %}
+                        <a class="btn waves-effect waves-light" href="{{ path('renouvellement_refuser',{'id':renouvellement.id}) }}" name="action">
+                            Refuser
+                        </a> 
+                        {% endif %}
+                                              
+                       
+                    </div>
+                    <div class="col s1">&nbsp;</div>  
+                </div> 
+
+                <div class="row">
+
+                    <div class="col s1">&nbsp;</div> 
+                    <div class="col s10"> 
+                        <div class="row cadreSaisie">
+                            <div class="facture_titre"></div>
+                            <div class="row">   
+                                <div class="col s1">&nbsp;</div> 
+                                <div class="col s2"><b>Date renouvellement: </b></div> 
+                                <div class="col s3">
+                                    {{ renouvellement.DateRenouvellement|date('d-m-Y') }}
+                                </div>  
+                            </div>  
+                          <!--   liste des achats   -->
+                           <div class="row">&nbsp;</div> 
+
+                    <div class="row">
+                        <div class="col s1">&nbsp;</div>  
+                        <div class="col s10">    
+                            <div class="row cadreSaisie">
+                                <div id="table-datatables">
+                                <div class="row">   
+                                   <div class="col s1">&nbsp;</div> 
+                                   <div class="col s"><b><h5>Liste des achats: </h5></b></div> 
+                                </div> 
+                                    <div class="row">
+                                        <div class="col s12">
+                                          
+                                            <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                                <thead>
+                                                    <tr>                                                    <th>Date Facture</th>
+                                                         <th>numero facture</th> 
+                                                         <th> nbrs de produits</th>
+                                                         <th>montant Facture </th>
+                                                              
+                                                    </tr>
+                                                </thead>
+                                            <tbody class="lignes">
+                                               {% for achat in renouvellement.achats %}
+                                            <tr>
+
+                                                <td>
+                                                    {% if achat.achat.dateAchat %}{{   achat.achat.facture.dateFacture|date('Y-m-d') }}{% endif %}
+                                                </td> 
+                                                <td>                                     
+                                                    {{ achat.achat.facture.numero }}
+                                                </td>    
+                                                <td>                                                  {{ achat.nbrProduits }}                                            
+                                                </td>                                            
+                                                <td>
+                                                    {{ achat.total }}
+                                                </td>                                                 
+                                            </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            </table>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>            
+                            </div>
+                        </div>      
+                        <div class="col s1">&nbsp;</div>  
+                    </div>
+                </div>      
+            </div>  
+
+                                
+
+                                <!-- historique -->
+                   
+                           
+                      <div class="row">
+                        <div class="historique col s12">
+                            <h4>Historique</h4>
+                             <section id="cd-timeline" class="cd-container">
+                                
+                                {% for ligne_historique in renouvellement.EtatsRenouvellements%}
+                                <div class="cd-timeline-block">
+                                    <div class="cd-timeline-img cd-picture"></div> <!-- cd-timeline-img -->
+
+                                    <div class="cd-timeline-content">
+                                        <p>{{ ligne_historique.dateEtat|date("d-m-Y H:i:s") }}</p>
+                                        <p>{{ ligne_historique.etatRenouvellement.libelle }}</p>                                       
+                                    </div> <!-- cd-timeline-content -->
+                                </div> <!-- cd-timeline-block -->
+                                {% endfor %}
+
+                            </section> <!-- cd-timeline -->
+
+                         </div>    
+                    </div>             
+                         
+{% endblock %} 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/js/jquery.dataTables.min.js') }}"></script>></script>
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/data-tables-script.js') }}"></script>></script>
+    <script type="text/javascript">
+        
+    $(document).on('click','#delete_button',function(){
+        var rep = confirm("Voulez-vous supprimer cette demande");
+        if(rep)
+            $("#form_delete").submit();
+    })
+
+    </script>
+{% endblock %}        

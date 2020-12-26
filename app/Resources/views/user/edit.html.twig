@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<section id="content">
+
+    <!--breadcrumbs start-->
+    <div id="breadcrumbs-wrapper">
+        <!-- Search for small screen -->
+        <div class="header-search-wrapper grey hide-on-large-only">
+            <i class="mdi-action-search active"></i>
+            <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <h5 class="breadcrumbs-title">Administration</h5>
+                    <ol class="breadcrumbs">
+                        <li><a href="{{ path('user_index') }}">Utilisateurs</a></li>
+                        <li class="active">Modifier un utilisateur</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--breadcrumbs end-->            
+
+    <div class="section">
+            <div class="row">&nbsp;</div> 
+            
+            <div class="row">
+                <div class="col s1">&nbsp;</div>  
+                <div class="col s10">    
+                    <div class="row cadreSaisie">
+                        <div id="table-datatables">
+                            <div class="row">
+                                <div class="col s12">
+                                    {{ form_start(edit_form) }}
+                                        {% do edit_form.plainPassword.setRendered %}
+                                        <div class="form-group form-material">
+                                            <label class="control-label" for="inputText">Username</label>
+                                            {{ form_widget(edit_form.username, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group form-material">
+                                            <label class="control-label" for="inputEmail">Email</label>
+                                            {{ form_widget(edit_form.email, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group form-material">
+                                            <label class="control-label" for="inputEmail">Nom</label>
+                                            {{ form_widget(edit_form.nom, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group form-material">
+                                            <label class="control-label" for="inputEmail">Prenom</label>
+                                            {{ form_widget(edit_form.prenom, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group form-material">
+                                            <label class="control-label" for="inputEmail">Profil</label>
+                                            {{ form_widget(edit_form.profil, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <a href="{{ path('user_show',{'id':user.id}) }}" class="btn cyan waves-effect waves-light">
+                                            <i class="mdi-content-reply"></i>
+                                        </a>
+                                        <button type="submit" class="btn cyan waves-effect waves-light" >Valider</button>
+                                    {{ form_end(edit_form) }}
+                                </div>
+                            </div>
+                            
+                        </div>            
+                    </div>                          
+                </div>      
+                <div class="col s1">&nbsp;</div>  
+            </div>
+        </div>      
+</section>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <!-- START CONTENT -->
+    <section id="content">
+
+        <!--breadcrumbs start-->
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen -->
+            <div class="header-search-wrapper grey hide-on-large-only">
+                <i class="mdi-action-search active"></i>
+                <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <h5 class="breadcrumbs-title">Achat</h5>
+                        <ol class="breadcrumbs">
+                            <li><a href="{{ path('achat_index') }}">Liste des achats</a></li>
+                            <li class="active">Création d'un achat</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--breadcrumbs end-->
+        <!--start container-->
+        <div class="container">
+
+            <div class="row" style="padding-bottom: 20px; padding-top: 20px;">    
+                <div class="col s1">&nbsp;</div>  
+                <div class="col s10"> 
+                    <a class="btn waves-effect waves-light " href="{{ path('achat_index') }}" name="action">
+                        Retour<i class="mdi-content-reply left"></i>
+                    </a>
+                    <!-- <button class="btn waves-effect waves-light" type="button" name="action" id="enregistrer">Enregistrer
+                        <i class="mdi-content-send right"></i>
+                    </button> -->
+                </div>
+                <div class="col s1">&nbsp;</div>  
+            </div>
+
+            <div class="row">
+
+                <div class="col s1">&nbsp;</div> 
+                <div class="col s10"> 
+                    
+                    <div class="row">
+
+
+                        <!--Basic Tabs-->
+                        <div id="basic-tabs" class="section">
+                            <div class="row">
+                                <div class="col s12">
+                                    <ul class="tabs tab-demo z-depth-1">
+                                        <li class="tab col s3"><a class="active" href="#test1">Achat</a></li>
+                                        <li class="tab col s3"><a href="#test2"></a></li>
+                                        <li class="tab col s3"><a href="#test3"></a></li>
+                                    </ul>
+                                </div>
+                                <div class="col s12">
+                                
+                                <!--    tab : Achat -->
+                                    <div id="test1" class="col s12">
+                                        <br>
+                                        <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                            <thead>
+                                                <tr style="background: #fff;">
+                                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                    <th style="background: #fff;">id</th>
+                                                    <th style="background: #fff;">date Achat</th>
+                                                </tr>
+                                            </thead>
+                                         
+                                            <tfoot>
+                                                <tr style="background: #fff;">
+                                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                    <th style="background: #fff;">id</th>
+                                                    <th style="background: #fff;">date Achat</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                    
+                                                    {% for demande in demandes %}
+                                                    <tr style="border-bottom: 1px dotted #333;">
+                                                        <td><i class="mdi-action-view-headline" style="font-size: 20px;"></i></td>
+                                                        <td>
+                                                            {{ demande.id }}
+                                                            <span class="erreur erreur_achat0" style="display: none">Champ obligatoire</span>
+                                                        </td>
+                                                        <td>{{ demande.dateDemande|date('d-m-Y') }}</td>
+                                                    </tr>
+                                                {% endfor%}
+                                                    
+                                               
+                                            </tbody>
+                                        </table> 
+                                    </div>
+
+                                      <!--    tab : Devis -->                                    
+                                    <div id="test2" >
+                                        <br>
+                                        {%  for devis in deviss  %}  
+                                        <!--  block pour chaque devis  -->
+                                        <div class="row cadreSaisie">
+                                          
+                                                <div class="row">
+                                                Devis {{ loop.index }}
+                                                </div>
+                                        
+                                                <div <div class="row cadreSaisie blockDevis">>        
+                                                    <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                                        <thead>
+                                                            <tr style="background: #fff;">
+                                                                <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                                <th style="background: #fff;">produit</th>
+                                                                <th style="background: #fff;">Qte</th>
+                                                                <th style="background: #fff;">prix_ht</th>
+                                                                <th style="background: #fff;">Remise</th>
+                                                                <th style="background: #fff;">Taux TVA</th>
+                                                            </tr>
+                                                        </thead>                                        
+                                                       
+                                                       <tbody>
+                                                          {%  for ligneDevis in devis.lignesDevis  %}
+                                                        <tr>
+                                                            <td><i class="mdi-action-view-headline" style="font-size: 20px;"></i>
+                                                            </td>
+                                                            <td> {{ ligneDevis.produit.libelle }}</td>
+                                                            <td> {{ ligneDevis.qte }} </td>
+                                                            <td> {{ ligneDevis.prixHt }} </td>
+                                                            <td> {{ ligneDevis.remise }} </td>
+                                                            <td> {{ ligneDevis.tauxTva.taux }} </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                     </tbody>
+                                                    </table> 
+
+                                                </div> 
+                                        </div>       
+                                        {% endfor %}
+                                    </div>
+                                     <!--    tab : facture -->
+                                   <div id="test3" class="col s12">
+                                        <br>
+                                        <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                            <thead>
+                                                <tr style="background: #fff;">
+                                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                    <th style="background: #fff;">produit</th>
+                                                    <th style="background: #fff;">Qte</th>
+                                                    <th style="background: #fff;">prix_ht</th>
+                                                    <th style="background: #fff;">Remise</th>
+                                                    <th style="background: #fff;">Taux TVA</th>
+                                                </tr>
+                                            </thead>
+                                         
+                                            <tfoot>
+                                                <tr style="background: #fff;">
+                                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                    <th style="background: #fff;">produit</th>
+                                                    <th style="background: #fff;">Qte</th>
+                                                    <th style="background: #fff;">prix_ht</th>
+                                                    <th style="background: #fff;">Remise</th>
+                                                    <th style="background: #fff;">Taux TVA</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end container-->
+    </section>
+{% endblock %}

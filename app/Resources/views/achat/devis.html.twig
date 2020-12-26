@@ -1,0 +1,161 @@
+<form id="formDevis" name="facturationbundle_devis" method="post" action="{{ path('achat_new_devis') }}">
+    {% for demande in demandes %}    
+    <input type="hidden" name="demande{{ loop.index }}" value="{{ demande.id }}">
+    {% endfor %}
+    <div id="test2" class="col s12 lignes" data-prototype="{% filter escape %}
+                                        {{ include('gestionachatsFondDeRoulementBundle:Default:devis.html.twig', { 'devis': formsDevis.deviss.vars.prototype }) }}
+                                   {% endfilter %}">
+    <br>
+
+    {% set i = 0 %}
+    {%  for devis in formsDevis.deviss  %}
+        <div class="row cadreSaisie blockDevis">
+            <div class="devis_titre">Devis {{ i+1 }}</div>
+            <div class="row">   
+                <div class="col s1">&nbsp;</div> 
+                <div class="input-field col s5">
+                    {{ form_widget(devis.numero) }}
+                    <label for="Adresse">Numero</label>
+                    <span class="erreur erreur_numero_{{ i }}" style="display: none">Champ obligatoire</span>
+                </div>
+                <div class="input-field col s5">
+                    {{ form_widget(devis.Fournisseur) }}
+                    <span class="erreur erreur_unite_{{ i }}" style="display: none">Champ obligatoire</span>
+                </div>                                  
+                <div class="col s6">&nbsp;</div>
+            </div>  
+            <div class="row">   
+                <div class="col s1">&nbsp;</div> 
+                <div class="input-field col s5">
+                    {{ form_widget(devis.dateDevis) }}
+                    <span class="erreur erreur_date_{{ i }}" style="display: none">Champ obligatoire</span>
+                </div>
+                <div class="input-field col s5">
+                    {{ form_widget(devis.fichierDevis) }}
+                    <label for="Adresse"></label>
+                    <span class="erreur erreur_fichier_{{ i }}" style="display: none">Champ obligatoire</span>
+                </div>                            
+                <div class="col s6">&nbsp;</div>
+            </div>                                                  
+        </div>
+        <div class="row cadreSaisie_secand">
+
+            <div class="facture_titre">Produits :</div>                                                
+
+            <div class="col s12" id="produitDEvis{{ i+1 }}">
+                <div>
+                    <div class="col s12">
+                        <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                            <thead>
+                                <tr style="background: #fff;">
+                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                    <th style="background: #fff; width: 20%;">Produit</th>
+                                    <th style="background: #fff; width: 10%;">Quantité</th>
+                                    <th style="background: #fff; width: 20%;">Prix HT</th>
+                                    <th style="background: #fff; width: 10%;">Remise</th>
+                                    <th style="background: #fff; width: 20%;">TVA %</th>
+                                    <th style="background: #fff; width: 20%;">Total</th>
+                                </tr>
+                            </thead>
+                         
+                            <tfoot>
+                                <tr style="background: #fff;">
+                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                    <th style="background: #fff; width: 20%;">Produit</th>
+                                    <th style="background: #fff; width: 10%;">Quantité</th>
+                                    <th style="background: #fff; width: 20%;">Prix HT</th>
+                                    <th style="background: #fff; width: 10%;">Remise</th>
+                                    <th style="background: #fff; width: 20%;">TVA %</th>
+                                    <th style="background: #fff; width: 20%;">Total</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {% set j = 0 %}                           
+                                {% for ligneDvis in devis.lignesDevis %}
+                                    <tr>
+                                        <td><i class="mdi-action-view-headline" style="font-size: 20px;"></i></td>
+                                        <td>
+                                            {{ form_widget(ligneDvis.produit,{'attr':{
+                                                'data-i':i,
+                                                'data-j':j,
+                                                'class':'produit'~i~' '~'produit'
+                                            }}) }}
+                                            <span class="erreur erreur_produit_{{ i }}_{{ j }}" style="display: none">Champ obligatoire</span>
+                                        </td>
+                                        <td>
+                                            {{ form_widget(ligneDvis.qte,{'attr':{
+                                                'data-i':i,
+                                                'data-j':j,
+                                                'class':'quantite'~i~' '~'quantite'
+                                            }}) }}
+                                            <span class="erreur erreur_qte_{{ i }}_{{ j }}" style="display: none">Champ obligatoire</span>
+                                        </td>
+                                        <td>
+                                            {{ form_widget(ligneDvis.prixHt,{'attr':{
+                                                'data-i':i,
+                                                'data-j':j,
+                                                'class':'prixUnitaire'~i~' '~'prixUnitaire'
+                                            }}) }}
+                                            <span class="erreur erreur_pu_{{ i }}_{{ j }}" style="display: none">Champ obligatoire</span>
+                                        </td>
+                                        <td>
+                                            {{ form_widget(ligneDvis.remise,{'attr':{
+                                                'data-i':i,
+                                                'data-j':j,
+                                                'class':'remise'~i~' '~'remise'
+                                            }}) }}
+                                            <span class="erreur erreur_remise_{{ i }}_{{ j }}" style="display: none">Champ obligatoire</span>
+                                        </td>
+                                        <td>
+                                            {{ form_widget(ligneDvis.tauxTva,{'attr':{
+                                                'data-i':i,
+                                                'data-j':j,
+                                                'class':'tauxTva'~i~' '~'tauxTva'
+                                            }}) }}
+                                            <span class="erreur erreur_taux_tva_{{ i }}_{{ j }}" style="display: none">Champ obligatoire</span>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" id="tva_{{ i }}_{{ j }}" value="">
+                                            <div id="tot_{{ i }}_{{ j }}" style="text-align: right;"></div>
+                                        </td>
+                                    </tr>
+                                    {% set j = j + 1 %}
+                                {% endfor %}
+                            </tbody>
+                        </table>   
+                    </div>
+                </div>
+            </div>
+        </div>    
+        <div class="row cadreSaisie_secand">
+
+            <div class="facture_titre">Totaux </div>
+
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s8">&nbsp;</div>
+                    <div class="col s4">
+                        <div class="row">
+                            <div class="col s6">Hors Taxes</div>
+                            <div class="col s5"><div id="tot_ht_{{ i }}" style="text-align: right;"></div></div>
+                            <div class="col s1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12" id="totaux_{{ i }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>   
+
+        <br>
+    {% set i = i + 1 %}    
+    {% endfor %}
+    
+</div>
+<br>
+<button type="submit" class="btn darken-2">Enregistrer</i></button>
+<!-- <a class="btn darken-2 add_tag_link">Ajouter un devis</i></a> -->
+{{ form_widget(formsDevis._token) }}    
+</form>

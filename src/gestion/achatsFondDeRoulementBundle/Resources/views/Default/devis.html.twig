@@ -1,0 +1,65 @@
+<div id="nouveauDevis">
+	<div class="row cadreSaisie blockDevis">
+	    <div class="devis_titre">
+	    	Devis __name2__
+	    	<a class="btn-floating waves-effect waves-light red remove-tag right" id="__name__"><i class="mdi-content-clear"></i></a>
+	    </div>
+	    <div class="row">   
+	        <div class="col s1">&nbsp;</div> 
+	        <div class="input-field col s5">
+	            {{ form_widget(devis.numero) }}
+	            <label for="Adresse">Numero</label>
+	            <span class="erreur erreur_numero___name__" style="display: none">Champ obligatoire</span>
+	        </div>
+	        <div class="input-field col s5">
+	            {{ form_widget(devis.Fournisseur) }}
+	            <span class="erreur erreur_unite___name__" style="display: none">Champ obligatoire</span>
+	        </div>                                  
+	        <div class="col s6">&nbsp;</div>
+	    </div>  
+	    <div class="row">   
+	        <div class="col s1">&nbsp;</div> 
+	        <div class="input-field col s5">
+	            {{ form_widget(devis.dateDevis) }}
+	            <span class="erreur erreur_date___name__" style="display: none">Champ obligatoire</span>
+	        </div>
+	        <div class="input-field col s5">
+	            {{ form_widget(devis.fichierDevis) }}
+	            <label for="Adresse">Charger le fichier</label>
+	            <span class="erreur erreur_fichier___name__" style="display: none">Champ obligatoire</span>
+	        </div>                            
+	        <div class="col s6">&nbsp;</div>
+	    </div>                                                  
+	</div>
+	<div class="row cadreSaisie_secand">
+
+	    <div class="facture_titre">Produits :</div>                                                
+
+	    <div class="col s12" id="produitDEvis__name2__">
+	    
+	    </div>
+	</div>    
+	<div class="row cadreSaisie_secand">
+
+	    <div class="facture_titre">Totaux </div>
+
+	    <div class="col s12">
+	        <div class="row">
+	            <div class="col s8">&nbsp;</div>
+	            <div class="col s4">
+	                <div class="row">
+	                    <div class="col s6">Hors Taxes</div>
+	                    <div class="col s5"><div id="tot_ht___name__" style="text-align: right;"></div></div>
+	                    <div class="col s1"></div>
+	                </div>
+	                <div class="row">
+	                    <div class="col s12" id="totaux___name__"></div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+
+	</div>   
+
+	<br>
+</div>	

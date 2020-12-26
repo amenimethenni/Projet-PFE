@@ -1,0 +1,229 @@
+<?php
+
+namespace gestion\achatsFondDeRoulementBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * LigneDevis
+ *
+ * @ORM\Table(name="ligne_devis")
+ * @ORM\Entity(repositoryClass="gestion\achatsFondDeRoulementBundle\Repository\LigneDevisRepository")
+ */
+class LigneDevis
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \Produit
+     *
+     * @ORM\ManyToOne(targetEntity="Produit")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="produit_id", referencedColumnName="id")
+     * })
+     */
+    private $produit;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="qte", type="float")
+     */
+    private $qte;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prix_ht", type="string", length=255)
+     */
+    private $prixHt;
+
+    /**
+     * @var \TauxTva
+     *
+     * @ORM\ManyToOne(targetEntity="TauxTva")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tauxTva_id", referencedColumnName="id")
+     * })
+     */
+    private $tauxTva;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="remise", type="float")
+     */
+    private $remise;
+
+    /**
+     * @var \Facture
+     *
+     * @ORM\ManyToOne(targetEntity="Devis", cascade={"persist","remove"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="devis_id", referencedColumnName="id")
+     * })
+     */
+    private $devis;
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set qte
+     *
+     * @param float $qte
+     *
+     * @return LigneDevis
+     */
+    public function setQte($qte)
+    {
+        $this->qte = $qte;
+
+        return $this;
+    }
+
+    /**
+     * Get qte
+     *
+     * @return float
+     */
+    public function getQte()
+    {
+        return $this->qte;
+    }
+
+    /**
+     * Set prixHt
+     *
+     * @param string $prixHt
+     *
+     * @return LigneDevis
+     */
+    public function setPrixHt($prixHt)
+    {
+        $this->prixHt = $prixHt;
+
+        return $this;
+    }
+
+    /**
+     * Get prixHt
+     *
+     * @return string
+     */
+    public function getPrixHt()
+    {
+        return $this->prixHt;
+    }
+
+    /**
+     * Set tauxTva
+     *
+     * @param string $tauxTva
+     *
+     * @return LigneDevis
+     */
+    public function setTauxTva($tauxTva)
+    {
+        $this->tauxTva = $tauxTva;
+
+        return $this;
+    }
+
+    /**
+     * Get tauxTva
+     *
+     * @return string
+     */
+    public function getTauxTva()
+    {
+        return $this->tauxTva;
+    }
+
+    /**
+     * Set remise
+     *
+     * @param float $remise
+     *
+     * @return LigneDevis
+     */
+    public function setRemise($remise)
+    {
+        $this->remise = $remise;
+
+        return $this;
+    }
+
+    /**
+     * Get remise
+     *
+     * @return float
+     */
+    public function getRemise()
+    {
+        return $this->remise;
+    }
+
+    /**
+     * Set produit
+     *
+     * @param \gestion\achatsFondDeRoulementBundle\Entity\Produit $produit
+     *
+     * @return LigneDevis
+     */
+    public function setProduit(\gestion\achatsFondDeRoulementBundle\Entity\Produit $produit = null)
+    {
+        $this->produit = $produit;
+
+        return $this;
+    }
+
+    /**
+     * Get produit
+     *
+     * @return \gestion\achatsFondDeRoulementBundle\Entity\Produit
+     */
+    public function getProduit()
+    {
+        return $this->produit;
+    }
+
+    /**
+     * Set devis
+     *
+     * @param \gestion\achatsFondDeRoulementBundle\Entity\Devis $devis
+     *
+     * @return LigneDevis
+     */
+    public function setDevis(\gestion\achatsFondDeRoulementBundle\Entity\Devis $devis = null)
+    {
+        $this->devis = $devis;
+
+        return $this;
+    }
+
+    /**
+     * Get devis
+     *
+     * @return \gestion\achatsFondDeRoulementBundle\Entity\Devis
+     */
+    public function getDevis()
+    {
+        return $this->devis;
+    }
+}

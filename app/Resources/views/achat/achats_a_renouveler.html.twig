@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('js/plugins/data-tables/css/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+{% endblock %}
+
+{% block content %}
+
+    <!-- START CONTENT -->
+    <section id="content">
+
+            <!--breadcrumbs start-->
+            <div id="breadcrumbs-wrapper">
+                <!-- Search for small screen -->
+                <div class="header-search-wrapper grey hide-on-large-only">
+                    <i class="mdi-action-search active"></i>
+                    <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5 class="breadcrumbs-title">les achats non renouvelés</h5>
+                            <ol class="breadcrumbs">
+                                <li><a href="{{ path('achat_index') }}">Liste des achats non renouvelés</a></li>
+                                
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--breadcrumbs end-->  
+
+
+
+
+            <!--start container-->
+            <div class="container">
+                <div class="section">
+                    <div class="row">    
+                        <div class="col s1">&nbsp;</div>  
+                        <div class="col s10"> 
+                           
+                        </div>
+                        <div class="col s1">&nbsp;</div>  
+                    </div>
+
+                    <div class="row">&nbsp;</div> 
+
+                    <div class="row">
+                        <div class="col s1">&nbsp;</div>  
+                        <div class="col s10">    
+                            <div class="row cadreSaisie">
+                                <div id="table-datatables">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <form method="post" id="form" action="{{ path('renouvellement_new') }}">
+                                            <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+            <input type="checkbox" name="checkAll" class="filled-in" id="checkAll" />
+                                        <label for="checkAll">&nbsp</label>
+                                                        </th>
+                                                        <th>N°</th>
+                                                        <th>Date achat</th>
+                                                        <th>facture</th>          
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                            
+                                        {% for achat in achats %}                                   
+                                                <tr>
+                                                    <td>
+                                                        <input  type="checkbox" 
+                                                                class="filled-in" 
+                                                                name="check{{ loop.index }}" 
+                                                                id="check{{ loop.index }}"
+                                                                value="{{ achat.achat.id }}" />
+                                                        <label for="check{{ loop.index }}">&nbsp</label>
+                                                    </td>
+                                                    <td><a href="{{ path('renouvellement_show', { 'id': achat.achat.id }) }}">{{ achat.achat.id }}
+                                                    </a></td>  
+                                                    <td>{{ achat.achat.dateAchat|date('d-m-Y') }}</td>
+                                                    <td>{{ achat.total|number_format(3,',','','') }}</td>
+                                                </tr>                                                 
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                    <th colspan="7">
+                                                        <button class="waves-effect waves-light btn" type="submit">Valider</button>
+                                                    </th>
+                                                </tfoot>
+                                            </table>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>            
+                            </div>
+                        </div>      
+                        <div class="col s1">&nbsp;</div>  
+                    </div>
+                </div>      
+            </div>  
+            {% endblock %}                                            
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/js/jquery.dataTables.min.js') }}"></script>></script>
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/data-tables-script.js') }}"></script>></script>
+
+    <script type="text/javascript">
+        $(document).on('click','#Valider',function(){
+            $('#form').submit();
+        });
+    </script>
+    
+{% endblock %}
+
+            
+   
+

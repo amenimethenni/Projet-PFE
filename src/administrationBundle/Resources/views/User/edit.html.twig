@@ -1,0 +1,54 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+<body class="site-navbar-small">
+
+<div class="page-content container-fluid">
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <!-- Panel Static Labels -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Modifer </h3>
+                </div>
+                <div class="panel-body container-fluid">
+                    <form autocomplete="off" action="{{ path('user_update_user', {id:user.id})}}" method="POST" role="form" {{ form_enctype(form) }}>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputText">Username</label>
+                            {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputEmail">Email</label>
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputEmail">Email</label>
+                            {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputEmail">Email</label>
+                            {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="form-group form-material">
+                            <label class="control-label" for="inputEmail">Email</label>
+                            {{ form_widget(form.sexe, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+
+                    <span class="input-group-btn">
+                      <button class="btn btn-info" type="submit"> Modifier</button>
+                    </span>
+                            </div>
+                        </div>
+            {{ form_rest(form) }}
+                    </form>
+                </div>
+            </div>
+            <!-- End Panel Static Labels -->
+        </div>
+</div>
+
+
+</body>
+{% endblock %}

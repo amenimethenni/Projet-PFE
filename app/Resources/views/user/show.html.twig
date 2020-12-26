@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<section id="content">
+
+    <!--breadcrumbs start-->
+    <div id="breadcrumbs-wrapper">
+        <!-- Search for small screen -->
+        <div class="header-search-wrapper grey hide-on-large-only">
+            <i class="mdi-action-search active"></i>
+            <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <h5 class="breadcrumbs-title">Administration</h5>
+                    <ol class="breadcrumbs">
+                        <li><a href="{{ path('user_index') }}">Utilisateurs</a></li>
+                        <li class="active">Modifier un utilisateur</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--breadcrumbs end-->            
+
+    <div class="section">
+            <div class="row">&nbsp;</div> 
+            
+            <div class="row">
+                <div class="col s1">&nbsp;</div> 
+                <div class="col s10"> 
+                    <div class="facture_actions">
+                        <a href="{{ path('user_index') }}" class="btn cyan waves-effect waves-light">
+                            <i class="mdi-content-reply"></i>
+                        </a>
+
+                        {% if droitsMenuPrincipal['modifier']=="1" %}
+                        <a href="{{ path('user_update',{id:user.id}) }}" class="btn cyan waves-effect waves-light">
+                            <i class="mdi-editor-mode-edit"></i>
+                        </a>
+                        {% endif %}
+
+                        {% if droitsMenuPrincipal['activer']=="1" %}
+                            {% if user.enabled %}
+                            <a href="{{ path('user_activate',{id:user.id}) }}" class="btn cyan waves-effect waves-light"><i class="mdi-action-lock"></i></a>
+                            {% else %}
+                            <a href="{{ path('user_activate',{id:user.id}) }}" class="btn cyan waves-effect waves-light"><i class="mdi-action-lock-open"></i></a>
+                            {% endif %}
+                        {% endif %}
+                    </div>    
+                </div>    
+                <div class="col s1">&nbsp;</div>
+            </div>
+
+            <div class="row">
+                <div class="col s1">&nbsp;</div>  
+                <div class="col s10">    
+                    <div class="row cadreSaisie">
+                        <div id="table-datatables">
+                            <div class="row">
+                                <div class="col s12">
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputText">Login</label>
+                                        </div>
+                                        <div class="col s9">       
+                                            {{ user.username }}
+                                        </div>
+                                    </div>    
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputEmail">Email</label>
+                                        </div>
+                                        <div class="col s9">    
+                                        {{ user.email }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputEmail">Nom</label>
+                                        </div>
+                                        <div class="col s9">    
+                                            {{ user.nom }}
+                                        </div>    
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputEmail">Prenom</label>
+                                        </div>
+                                        <div class="col s9">    
+                                            {{ user.prenom }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputEmail">Profil</label>
+                                        </div>
+                                        <div class="col s9">    
+                                            {{ user.profil.libelle }}
+                                        </div>    
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputEmail">Unité CRB</label>
+                                        </div>
+                                        <div class="col s9">    
+                                            {{ user.crb.libelle }}
+                                        </div>    
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputEmail">Unité</label>
+                                        </div>
+                                        <div class="col s9">    
+                                            {{ user.unite.libelle }}
+                                        </div>    
+                                    </div>
+                                    <!-- <div class="row">
+                                        <div class="col s3">
+                                            <label class="control-label" for="inputEmail">Mot de passe</label>
+                                        </div>
+                                        <div class="col s9">    
+                                            <i class="mdi-navigation-more-horiz"></i>
+                                            <a href="{{ path('user_update_password',{id:user.id}) }}"><i class="mdi-image-edit"></i></a>
+                                        </div>    
+                                    </div> -->
+                                </div>
+                            </div>
+                            
+                        </div>            
+                    </div>                          
+                </div>      
+                <div class="col s1">&nbsp;</div>  
+            </div>
+        </div>      
+</section>
+{% endblock %}

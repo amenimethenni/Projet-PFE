@@ -1,0 +1,144 @@
+<form id="formDevis" name="facturationbundle_devis" method="post" action="{{ path('achat_new_facture') }}">
+    {% for demande in demandes %}    
+    <input type="hidden" name="demande{{ loop.index }}" value="{{ demande.id }}">
+    {% endfor %}
+    
+
+    <div class="row cadreSaisie blockDevis">
+        <div class="row">   
+            <div class="col s1">&nbsp;</div> 
+            <div class="input-field col s5">
+                {{ form_widget(formsFacture.facture.numero) }}
+                <label for="Adresse">Numero</label>
+                <span class="erreur erreur_numero" style="display: none">Champ obligatoire</span>
+            </div>
+            <div class="input-field col s5">
+                {{ form_widget(formsFacture.facture.Fournisseur) }}
+                <span class="erreur erreur_unite" style="display: none">Champ obligatoire</span>
+            </div>                                  
+            <div class="col s6">&nbsp;</div>
+        </div>  
+        <div class="row">   
+            <div class="col s1">&nbsp;</div> 
+            <div class="input-field col s5">
+                {{ form_widget(formsFacture.facture.dateFacture) }}
+                <span class="erreur erreur_date" style="display: none">Champ obligatoire</span>
+            </div>
+            <div class="input-field col s6">
+                {{ form_widget(formsFacture.facture.fichierFacture) }}
+                <label for="Adresse"></label>
+                <span class="erreur erreur_fichier" style="display: none">Champ obligatoire</span>
+            </div>                            
+            <div class="col s6">&nbsp;</div>
+        </div>                                                  
+    </div>
+    <div class="row cadreSaisie_secand">
+
+        <div class="facture_titre">Produits :</div>                                                
+
+        <div class="col s12" id="produitDEvis">
+            <div>
+                <div class="col s12">
+                    <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                        <thead>
+                            <tr style="background: #fff;">
+                                <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                <th style="background: #fff; width: 20%;">Produit</th>
+                                <th style="background: #fff; width: 10%;">Quantité</th>
+                                <th style="background: #fff; width: 20%;">Prix HT</th>
+                                <th style="background: #fff; width: 10%;">Remise</th>
+                                <th style="background: #fff; width: 20%;">TVA %</th>
+                                <th style="background: #fff; width: 20%;">Total</th>
+                            </tr>
+                        </thead>
+                     
+                        <tfoot>
+                            <tr style="background: #fff;">
+                                <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                <th style="background: #fff; width: 20%;">Produit</th>
+                                <th style="background: #fff; width: 10%;">Quantité</th>
+                                <th style="background: #fff; width: 20%;">Prix HT</th>
+                                <th style="background: #fff; width: 10%;">Remise</th>
+                                <th style="background: #fff; width: 20%;">TVA %</th>
+                                <th style="background: #fff; width: 20%;">Total</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% set j = 0 %}                           
+                            {% for ligneFacture in formsFacture.facture.lignesFactures %}
+                                <tr>
+                                    <td><i class="mdi-action-view-headline" style="font-size: 20px;"></i></td>
+                                    <td>
+                                        {{ form_widget(ligneFacture.produit,{'attr':{
+                                            'data-j':j,
+                                            'class': 'facture_produit'
+                                        }}) }}
+                                        <span class="erreur erreur_produit_{{ j }}" style="display: none">Champ obligatoire</span>
+                                    </td>
+                                    <td>
+                                        {{ form_widget(ligneFacture.qte,{'attr':{
+                                            'data-j':j,
+                                            'class':'facture_quantite'
+                                        }}) }}
+                                        <span class="erreur erreur_qte_{{ j }}" style="display: none">Champ obligatoire</span>
+                                    </td>
+                                    <td>
+                                        {{ form_widget(ligneFacture.prixHt,{'attr':{
+                                            'data-j':j,
+                                            'class':'facture_prixUnitaire'
+                                        }}) }}
+                                        <span class="erreur erreur_pu_{{ j }}" style="display: none">Champ obligatoire</span>
+                                    </td>
+                                    <td>
+                                        {{ form_widget(ligneFacture.remise,{'attr':{
+                                            'data-j':j,
+                                            'class':'facture_remise'
+                                        }}) }}
+                                        <span class="erreur erreur_remise_{{ j }}" style="display: none">Champ obligatoire</span>
+                                    </td>
+                                    <td>
+                                        {{ form_widget(ligneFacture.tauxTva,{'attr':{
+                                            'data-j':j,
+                                            'class': 'facture_tauxTva'
+                                        }}) }}
+                                        <span class="erreur erreur_taux_tva_{{ j }}" style="display: none">Champ obligatoire</span>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" id="tva_{{ j }}" value="">
+                                        <div id="tot_{{ j }}" style="text-align: right;"></div>
+                                    </td>
+                                </tr>
+                                {% set j = j + 1 %}
+                            {% endfor %}
+                        </tbody>
+                    </table>   
+                </div>
+            </div>
+        </div>
+    </div>    
+    <div class="row cadreSaisie_secand">
+
+        <div class="facture_titre">Totaux </div>
+
+        <div class="col s12">
+            <div class="row">
+                <div class="col s8">&nbsp;</div>
+                <div class="col s4">
+                    <div class="row">
+                        <div class="col s6">Hors Taxes</div>
+                        <div class="col s5"><div id="tot_ht" style="text-align: right;"></div></div>
+                        <div class="col s1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12" id="totaux"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>   
+   	<br>
+	<button type="submit" class="btn darken-2">Enregistrer</i></button>
+	<!-- <a class="btn darken-2 add_tag_link">Ajouter un devis</i></a> -->
+	{{ form_widget(formsFacture._token) }}    
+</form>

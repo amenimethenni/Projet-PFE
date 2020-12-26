@@ -1,0 +1,14 @@
+<tr class="ligne__name__">
+	<td><i class="mdi-action-view-headline" style="font-size: 20px;"></i></td>
+	<td>
+		{{ form_widget(ligneDemande.produit) }}
+		<span class="erreur erreur_produit__name__" style="display: none">Champ obligatoire</span>
+	</td>
+	<td>
+		{{ form_widget(ligneDemande.qte) }}
+		<span class="erreur erreur_qte__name__" style="display: none">Champ obligatoire</span>
+	</td>
+	<td style="float: right;"><a class="btn-floating waves-effect waves-light red remove-tag" id="__name__"><i class="mdi-content-clear"></i></a></td>
+</tr>	
+
+<script type="text/javascript" src="{{ asset('js/plugins.js') }}"></script>

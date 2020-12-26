@@ -1,0 +1,288 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('js/plugins/data-tables/css/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+    <link href="{{ asset('css/loading.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    <!-- START CONTENT -->
+    <section id="content">
+
+            <!--breadcrumbs start-->
+            <div id="breadcrumbs-wrapper">
+                <!-- Search for small screen -->
+                <div class="header-search-wrapper grey hide-on-large-only">
+                    <i class="mdi-action-search active"></i>
+                    <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5 class="breadcrumbs-title">Administration</h5>
+                            <ol class="breadcrumbs">
+                                <li><a href="{{ path('profil_index') }}">Gestion des profils</a></li>
+                                <li class="active">Liste des profils</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--breadcrumbs end-->            
+
+            <!--start container-->
+            <div class="container">
+
+                <div id="mail-app" class="section">
+                    <div class="row">
+                        
+                        <div class="col s2">&nbsp;</div>
+                        <div class="col s8">
+                
+                            <div id="email-list" class="col s6 m4 l4 card-panel z-depth-1">
+                                <ul class="collection">
+                                    {% set i = 0 %}
+                                    {% for profil in profils %}
+                                    {% if i == 0 %}
+                                    <li class="collection-item selected" id="{{ profil.profil.id }}">
+                                    {% else %}
+                                    <li class="collection-item" id="{{ profil.profil.id }}">
+                                    {% endif %}
+                                        <span class="email-title">
+                                            {{ profil.profil.libelle }}
+                                            {% if profil.nbrUsers==0 and droitsMenuPrincipal['ajouter']=="1" %}
+                                            <a href="#" class="deleteProfil right" data-id="{{ profil.profil.id }}"><i class="mdi-action-delete"></i></a>
+                                            {% else %}
+                                            <div class="nbrUsers">{{  profil.nbrUsers }} Utilisateurs</div>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    {% set i = i + 1 %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div id="email-details" class="col s6 m7 l7 card-panel">
+                                {% set i = 0 %}
+                                {% for droit in droits %}
+                                    <ul>
+                                        <li class="module-item">
+                                            <!-- <input type="checkbox" class="filled-in module" id="module{{ i }}" data-id="{{ droit.module.id }}" data-libelle="{{ droit.module.libelle }}" />
+                                            <label for="module{{ i }}">{{ droit.module.libelle }}</label>    -->  
+                                            {{ droit.module.libelle }}                                        
+                                        </li>
+                                        <li>
+                                            <ul>
+                                                {% set j = 0 %}
+                                                {% for fonctionnalite in droit.fonctionnalites %}
+                                                    <li class="fonctionnalite-item"">
+                                                        {% if droitsMenuPrincipal['modifier']=="1" %}
+                                                        <input type="checkbox" class="filled-in relativeAuModule-{{ droit.module.libelle }}" id="fonctionnalite_{{ fonctionnalite.id }}" data-id="{{ fonctionnalite.id }}" />
+                                                        <label for="fonctionnalite_{{ fonctionnalite.id }}">{{ fonctionnalite.libelle }}</label>
+                                                        {% else %}
+                                                        <input type="checkbox" class="filled-in relativeAuModule-{{ droit.module.libelle }}" id="fonctionnalite_{{ fonctionnalite.id }}" data-id="{{ fonctionnalite.id }}" disabled="disabled" />
+                                                        <label for="fonctionnalite_{{ fonctionnalite.id }}">{{ fonctionnalite.libelle }}</label>
+                                                        {% endif %}
+                                                    </li>
+                                                    {% set j = j + 1 %}
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    </ul>    
+                                    {% set i = i + 1 %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col s2">&nbsp;</div>
+                    </div>
+
+                    {% if droitsMenuPrincipal['ajouter']=="1" %}
+                    <!-- Compose Email Trigger -->
+                    <div class="fixed-action-btn" style="top: 120px; right: 24px;">
+                        <a class="btn-floating btn-large red modal-trigger" href="#modal1">
+                            <i class="large mdi-content-add"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+
+
+            <!-- Compose Email Structure -->
+            <div id="modal1" class="modal" style="overflow:hidden; height: 200px; padding-top: 40px">
+                <div class="row" style="height: 100px; vertical-align: center;">
+                    <div class="col s1">&nbsp;</div>
+                    <div class="col s8 input-field">
+                        <input type="text" name="libelle" id="libelleProfil">
+                        <label for="Libelle">Libelle</label>
+                        <span class="erreur erreur_profil" style="display: none">Ce champ est obligatoire</span>
+                    </div>
+                    <div class="col s1" style="padding-top: 20px;">
+                        <button class="btn cyan waves-effect waves-light" type="button" name="action" id="addProfil">Valider</button>
+                    </div>
+                    <div class="col s1">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+                
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/js/jquery.dataTables.min.js') }}"></script>></script>
+    <script type="text/javascript" src="{{ asset('js/plugins/data-tables/data-tables-script.js') }}"></script>></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+
+            visualiserDroit(1);    
+
+            function visualiserDroit(profil_id){
+                $(".collection-item").removeClass("selected");
+                $("#"+profil_id).addClass("selected");
+
+                $.ajax({
+                    method: "POST",
+                    url:  "{{path('ajax_profil_has__fonctionnalites')}}",
+                    data : {
+                        id : profil_id
+                    },
+                    dataType: "json"
+                })
+                .always(function( data ) {
+                    $.each(data,function(key,value){
+                        $.each(value.droits,function(key2,value2){
+                            $("#fonctionnalite_"+value2.functionnalite).prop( 'checked' , (parseInt(value2.droit)==1));
+                        });        
+                    });
+                });
+            }
+
+            $(document).on('click','.collection-item',function(){                
+                visualiserDroit($(this).attr('id'));
+            });
+
+            $(document).on('click','.deleteProfil',function(){   
+                var profil_id = $(this).attr("data-id");             
+                
+                var rep = confirm("Vous confirmer la suppression?");
+                if(rep){                            
+                    $.ajax({
+                        method: "POST",
+                        url:  "{{path('ajaxDeleteProfil')}}",
+                        data : {
+                            profil_id : profil_id
+                        },
+                        dataType: "json"
+                    })
+                    .always(function( data ) {
+                        $("#"+profil_id).remove();
+                    });
+                }  
+
+            });    
+
+            $(document).on('click','#addProfil',function(){   
+                if($('#libelleProfil').val()==""){
+                    $('.erreur_profil').show();
+                }else{        
+                    var libelle = $('#libelleProfil').val();
+                    $('.erreur_profil').hide();                    
+                    $.ajax({
+                        method: "POST",
+                        url:  "{{path('ajaxAddProfil')}}",
+                        data : {
+                            libelle : libelle
+                        },
+                        dataType: "json"
+                    })
+                    .always(function( data ) {
+                        $(".collection").append('<li class="collection-item" id="'+data+'"><span class="email-title">'+libelle+'<a href="#" class="deleteProfil right" data-id="'+data+'"><i class="mdi-action-delete"></i></a></span></li>');
+                        $("#modal1").closeModal();
+                        $('#libelleProfil').val("")
+                    });
+                }  
+
+            });            
+
+            // $(document).on('click','.module',function(){               
+
+            //     $('input:checkbox.relativeAuModule-'+$(this).attr('data-libelle')).prop( 'checked' , $(this).is(":checked"));
+                
+            //     var module = $(this).attr("data-id");
+            //     var profil = $('.collection-item.selected').attr('id');
+            //     if($(this).is(":checked")){
+            //         $.ajax({
+            //             method: "POST",
+            //             url:  "{{path('ajax_grant_module')}}",
+            //             data : {
+            //                 profil_id : profil,
+            //                 module_id : module
+            //             },
+            //             dataType: "json"
+            //         })
+            //         .always(function( data ) {
+            //             console.log("ok");
+            //         });
+            //     }else{
+            //         $.ajax({
+            //             method: "POST",
+            //             url:  "{{path('ajax_retreive_module')}}",
+            //             data : {
+            //                 profil_id : profil,
+            //                 module_id : module
+            //             },
+            //             dataType: "json"
+            //         })
+            //         .always(function( data ) {
+            //             console.log("ok");
+            //         });
+            //     } 
+            // });
+
+            $(document).on('click','.filled-in',function(){                
+                var fonctionnalite = $(this).attr("data-id");
+                var profil = $('.collection-item.selected').attr('id');
+                if($(this).is(":checked")){
+                    $.ajax({
+                        method: "POST",
+                        url:  "{{path('ajax_grant_fonctionnalite')}}",
+                        data : {
+                            profil_id : profil,
+                            fonctionnalite_id : fonctionnalite
+                        },
+                        dataType: "json"
+                    })
+                    .always(function( data ) {
+                        console.log("ok");
+                    });
+                }else{
+                    $.ajax({
+                        method: "POST",
+                        url:  "{{path('ajax_retreive_fonctionnalite')}}",
+                        data : {
+                            profil_id : profil,
+                            fonctionnalite_id : fonctionnalite
+                        },
+                        dataType: "json"
+                    })
+                    .always(function( data ) {
+                        console.log("ok");
+                    });
+                }
+            });            
+
+            $(document).on({
+                ajaxStart: function() { 
+                    $("#loading").show();
+                    $("#loading_container").show();
+                },
+                ajaxStop: function() { 
+                    $("#loading").hide();
+                    $("#loading_container").hide();
+                }    
+            });
+        });
+    </script>
+{% endblock %}

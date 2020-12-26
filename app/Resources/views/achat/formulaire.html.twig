@@ -1,0 +1,425 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <!-- START CONTENT -->
+    <section id="content">
+
+        <!--breadcrumbs start-->
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen -->
+            <div class="header-search-wrapper grey hide-on-large-only">
+                <i class="mdi-action-search active"></i>
+                <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore Materialize">
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <h5 class="breadcrumbs-title">Achat</h5>
+                        <ol class="breadcrumbs">
+                            <li><a href="{{ path('demande_index') }}">Liste des achats</a></li>
+                            <li class="active">Création d'un achat</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--breadcrumbs end-->
+        
+
+        <!--start container-->
+        <div class="container">
+
+            <div class="row" style="padding-bottom: 20px; padding-top: 20px;">    
+                <div class="col s1">&nbsp;</div>  
+                <div class="col s10"> 
+                    <a class="btn waves-effect waves-light " href="{{ path('demande_index') }}" name="action">
+                        Retour<i class="mdi-content-reply left"></i>
+                    </a>
+                    <!-- <button class="btn waves-effect waves-light" type="button" name="action" id="enregistrer">Enregistrer
+                        <i class="mdi-content-send right"></i>
+                    </button> -->
+                </div>
+                <div class="col s1">&nbsp;</div>  
+            </div>
+
+            <div class="row">
+
+                <div class="col s1">&nbsp;</div> 
+                <div class="col s10"> 
+                    
+                    <div class="row">
+
+
+                        <!--Basic Tabs-->
+                        <div id="basic-tabs" class="section">
+                            <div class="row">
+                                <div class="col s12">
+                                    <ul class="tabs tab-demo z-depth-1">
+                                        <li class="tab col s3"><a class="active" href="#test1">Produits demandés</a></li>
+                                        <li class="tab col s3"><a href="#test2">Appel à la concurrence</a></li>
+                                        <li class="tab col s3"><a href="#test3">Facture</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col s12">
+
+                                    <!--    tab : Produits demandés -->
+                                    <div id="test1" class="col s12">
+                                        <br>
+                                        <table id="data-table-simple" class="responsive-table display" cellspacing="0">
+                                            <thead>
+                                                <tr style="background: #fff;">
+                                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                    <th style="background: #fff;">Produit</th>
+                                                    <th style="background: #fff;">Quantité</th>
+                                                </tr>
+                                            </thead>
+                                         
+                                            <tfoot>
+                                                <tr style="background: #fff;">
+                                                    <th style="width: 50px; background: #fff !important">&nbsp;</th>
+                                                    <th style="background: #fff;">Produit</th>
+                                                    <th style="background: #fff;">Quantité</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                {% for produit in produits %}
+                                                    <tr style="border-bottom: 1px dotted #333;">
+                                                        <td><i class="mdi-action-view-headline" style="font-size: 20px;"></i></td>
+                                                        <td>
+                                                            {{ produit.produit.libelle }}
+                                                            <span class="erreur erreur_produit0" style="display: none">Champ obligatoire</span>
+                                                        </td>
+                                                        <td>
+                                                            {{ produit.qte }}
+                                                            <span class="erreur erreur_qte0" style="display: none">Champ obligatoire</span>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table> 
+                                    </div>
+
+                                    <!--    tab : Appel à la concurrence -->
+                                    <div id="test2" class="col s12">
+                                        {{ include('achat/devis.html.twig') }} 
+                                    </div>
+
+                                    <!--    tab : facture -->
+                                    <div id="test3" class="col s12">
+                                        {{ include('achat/facture.html.twig') }} 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+                <div class="col s1">&nbsp;</div>  
+            </div>
+
+        </div>
+        <!--end container-->
+
+        </form>
+
+    </section>    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}    
+
+    <script type="text/javascript">
+
+        $('.facture_produit:not(:selected)').attr('disabled', true);
+
+        $(document).on('keyup','.prixUnitaire',function(){
+            var i = $(this).attr('data-i');
+            var j = $(this).attr('data-j');
+            majMontantLigne(i,j);
+        });   
+        $(document).on('keyup','.quantite',function(){
+            var i = $(this).attr('data-i');
+            var j = $(this).attr('data-j');
+            majMontantLigne(i,j);
+        });    
+        $(document).on('change','select.tauxTva',function(){
+            var i = $(this).attr('data-i');
+            var j = $(this).attr('data-j');
+            majMontantLigne(i,j);
+        });  
+        $(document).on('keyup','.remise',function(){
+            var i = $(this).attr('data-i');
+            var j = $(this).attr('data-j');
+            majMontantLigne(i,j);
+        });  
+
+        $(document).on('keyup','.facture_prixUnitaire',function(){
+            var j = $(this).attr('data-j');
+            majMontantLigne2(j);
+        });   
+        $(document).on('keyup','.facture_quantite',function(){
+            var j = $(this).attr('data-j');
+            majMontantLigne2(j);
+        });    
+        $(document).on('change','select.facture_tauxTva',function(){
+            var j = $(this).attr('data-j');
+            majMontantLigne2(j);
+        });  
+        $(document).on('keyup','.facture_remise',function(){
+            var j = $(this).attr('data-j');
+            majMontantLigne2(j);
+        });  
+
+        function majMontantLigne(i,j){
+            var qte = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_qte').val());
+            var pU  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_prixHt').val());
+            var tauTva = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_tauxTva option:selected').text());
+            var remise  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_remise').val());
+            var tva = (pU-remise)*(tauTva/100);
+            var tot = (pU-remise+tva)*qte;
+            //console.log(qte+"-"+pU+"-"+tauTva);
+            $('#tot_'+i+'_'+j).text(currencyFormat(tot));
+            $('#tva_'+i+'_'+j).val(currencyFormat(tva*qte));
+
+            majMontantTotal(i);
+            majMontantTotal2();
+        }
+        function majMontantLigne2(i){
+            var qte = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+i+'_qte').val());
+            var pU  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+i+'_prixHt').val());
+            var tauTva = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+i+'_tauxTva option:selected').text());
+            var remise  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+i+'_remise').val());
+            var tva = (pU-remise)*(tauTva/100);
+            var tot = (pU-remise+tva)*qte;
+            //console.log(qte+"*("+pU+"-"+remise+")+"+tauTva);
+            $('#tot_'+i).text(currencyFormat(tot));
+            $('#tva_'+i).val(currencyFormat(tva*qte));
+
+            majMontantTotal2(i);
+        }
+
+        
+        function majMontantTotal(i,taux_values,totaux_values){
+
+            //  total HT
+            var tot_ht = 0,
+                total = 0;
+            
+            $( ".prixUnitaire"+i ).each(function( index ) {
+                var i = $(this).attr('data-i');
+                var j = $(this).attr('data-j');
+                var qte = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_qte').val());
+                var pU  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_prixHt').val());
+                var remise  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_remise').val());
+                
+                if(currencyFormat($( this ).val())){
+                    tot_ht += qte*(pU-remise);
+                }
+            });
+            total += currencyFormat(tot_ht);
+            $("#tot_ht_"+i).text(currencyFormat(tot_ht));
+
+            //  totaux TVA   
+            //  1. vider les montants tva parcequ'ils vont être recalculé dans le foreach de la liste des taux tva
+            for (var i in taux_values) {                            
+                taux_values[i]["tva"] = [];
+                taux_values[i]["montants"] = [];
+            }
+            // 2.   parcours des taux de tva
+            $('select.tauxTva'+i).each(function(index_taux) {
+                var i = $(this).attr('data-i');
+                var j = $(this).attr('data-j');
+                var qte = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_qte').val());
+                var pU  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_prixHt').val());
+                var remise  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_remise').val());
+                var taux = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_tauxTva option:selected').text());
+
+                if($('#gestion_achatsfondderoulementbundle_devis_deviss_'+i+'_lignesDevis_'+j+'_tauxTva option:selected').val()){ 
+
+                    if ($.inArray(taux, $.map(taux_values, function(v) { return v["taux"]; }))==-1) {//  si le taux n'existe pas dans le tableau  
+                    // console.log("le taux "+taux+" n'existe pas dans le tableau = "+JSON.stringify(JSON.stringify(taux_values)));   
+                        var tab = {
+                            "taux" : taux,
+                            "tva" : [qte*((pU-remise)*taux/100)],
+                            "montants" : [qte*(pU-remise+((pU-remise)*taux/100))]
+                        };
+                        taux_values.push(tab);
+                    // console.log("Donc tableau devie "+JSON.stringify(JSON.stringify(taux_values)));    
+                    }else{  //  si le taux existe déjà dans le tableau
+                    // console.log("le taux "+taux+" existe dans le tableau = "+JSON.stringify(JSON.stringify(taux_values)));       
+                        var pos = $.inArray(taux, $.map(taux_values, function(v) { return v["taux"]; }));
+                        taux_values[pos]["tva"].push(qte*((pU-remise)*taux/100));
+                        taux_values[pos]["montants"].push(qte*(pU-remise+((pU-remise)*taux/100)));
+                    // console.log("Donc tableau devie "+JSON.stringify(JSON.stringify(taux_values)));        
+                    }
+
+                }                
+
+            });
+
+            //  3. affichage des tautaux pour chaque taux tva
+            $('#totaux_'+i).html("");            
+            $.each(taux_values,function(key,value){
+                // console.log(JSON.stringify("taux = "+JSON.stringify(value)));     
+                
+                var sum = 0;
+                $.each(value["tva"],function(){
+                    sum+=parseFloat(this);
+                    // console.log("tva = "+parseFloat(this)+" => sum = "+sum);
+                });
+
+                if(sum>0){
+                    total = parseFloat(total) + parseFloat(sum);
+                    console.log("tva = "+parseFloat(sum)+" => total = "+total);
+                    $('#totaux_'+i).append('<div class="row">'+
+                                        '<div class="col s6">TVA '+value["taux"]+'%</div>'+
+                                        '<div class="col s5"><div id="tot_ht" style="text-align : right">'+currencyFormat(sum)+'</div></div>'+
+                                        '<div class="col s1"></div>');
+                }  
+            });
+                
+                                               
+            // }
+
+            //  Total de la facture
+            $('#totaux_'+i).append('<div class="row">'+
+                                        '<div class="col s6"><b>Montant total </b></div>'+
+                                        '<div class="col s5"><div id="tot_ht" style="text-align : right"><b>'+currencyFormat(total)+'</b></div></div>'+
+                                        '<div class="col s1"></div>');
+        }
+
+        function majMontantTotal2(taux_values,totaux_values){
+            var taux_values = [];
+            var totaux_values = [];
+
+            //  total HT
+            var tot_ht = 0,
+                total = 0;
+            
+            $( ".facture_prixUnitaire" ).each(function( index ) {
+                var j = $(this).attr('data-j');
+                var qte = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_qte').val());
+                var pU  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_prixHt').val());
+                var remise  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_remise').val());
+                
+                if(currencyFormat($( this ).val())){
+                    tot_ht += qte*(pU-remise);
+                }
+            });
+            total += currencyFormat(tot_ht);
+            $("#tot_ht").text(currencyFormat(tot_ht));
+
+            //  totaux TVA   
+            //  1. vider les montants tva parcequ'ils vont être recalculé dans le foreach de la liste des taux tva
+            for (var i in taux_values) {                              
+                taux_values[i]["tva"] = [];
+                taux_values[i]["montants"] = [];
+            }
+            // 2.   parcours des taux de tva
+            $('select.facture_tauxTva').each(function(index_taux) {
+                var j = $(this).attr('data-j');
+                var qte = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_qte').val());
+                var pU  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_prixHt').val());
+                var remise  = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_remise').val());
+                var taux = currencyFormat($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_tauxTva option:selected').text());
+
+                if($('#gestion_achatsfondderoulementbundle_devis_facture_lignesFactures_'+j+'_tauxTva option:selected').val()){ 
+                    
+                    if ($.inArray(taux, $.map(taux_values, function(v) { return v["taux"]; }))==-1) {//  si le taux n'existe pas dans le tableau  
+
+                        var tab = {
+                            "taux" : taux,
+                            "tva" : [qte*((pU-remise)*taux/100)],
+                            "montants" : [qte*(pU-remise+((pU-remise)*taux/100))]
+                        };
+                        taux_values.push(tab);
+
+                    }else{  //  si le taux existe déjà dans le tableau
+
+                        var pos = $.inArray(taux, $.map(taux_values, function(v) { return v["taux"]; }));
+                        taux_values[pos]["tva"].push(qte*((pU-remise)*taux/100));
+                        taux_values[pos]["montants"].push(qte*(pU-remise+((pU-remise)*taux/100)));
+                        
+                    }
+
+                }                
+
+            });
+
+            //  3. affichage des tautaux pour chaque taux tva
+            $('#totaux').html("");            
+            $.each(taux_values,function(key,value){
+                console.log(JSON.stringify("taux = "+JSON.stringify(value)));     
+                
+                var sum = 0;
+                $.each(value["tva"],function(){
+                    sum+=parseFloat(this);
+                    console.log("tva = "+parseFloat(this)+" => sum = "+sum);
+                });
+console.log(value["tva"]+"="+sum);
+                if(sum>0){
+                    total = parseFloat(total) + parseFloat(sum);
+                    console.log("tva = "+parseFloat(sum)+" => total = "+total);
+                    $('#totaux').append('<div class="row">'+
+                                        '<div class="col s6">TVA '+value["taux"]+'%</div>'+
+                                        '<div class="col s5"><div id="tot_ht" style="text-align : right">'+currencyFormat(sum)+'</div></div>'+
+                                        '<div class="col s1"></div>');
+                }  
+            });
+              
+            // //  Total de la facture
+            $('#totaux').append('<div class="row">'+
+                                        '<div class="col s6"><b>Montant total </b></div>'+
+                                        '<div class="col s5"><div id="tot_ht" style="text-align : right"><b>'+currencyFormat(total)+'</b></div></div>'+
+                                        '<div class="col s1"></div>');
+        }
+
+        function currencyFormat(data){
+            if( isNaN( parseFloat( data ) ) ) return 0;
+            return parseFloat(Math.round(data * 1000) / 1000).toFixed(3);
+        }
+    </script>
+
+    <script type="text/javascript">
+        var $addTagLink = $('.add_tag_link');
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            var $collectionHolder = $('.lignes');
+            $collectionHolder.data('index', $collectionHolder.find('tr').length);
+
+            var $collectionHolder = $('.lignes');
+            $collectionHolder.data('index', $collectionHolder.find('tr').length);
+            
+            $addTagLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                
+                // add a new tag form (see code block below)
+                addTagForm($collectionHolder);
+            });
+
+            function addTagForm($collectionHolder) {
+            
+                var prototype = $collectionHolder.data('prototype');
+                var index = $('.blockDevis').length;//$collectionHolder.data('index');
+                var mapObj = {
+                   __name__:index,
+                   __name2__:index+1
+                };
+                var newForm = prototype.replace(/__name__|__name2__/g, function(matched){
+                    return mapObj[matched];
+                });
+                $collectionHolder.data('index', index + 1);
+                var $newFormLi = $('.lignes').append(newForm);
+                $("#produitDEvis"+index+1).text("ok");
+
+                $('.remove-tag').click(function(e) {
+                    e.preventDefault();
+                    
+                    $(this).parent().parent().parent().remove();
+                    
+                    return false;
+                });
+            }
+        });   
+    </script>
+{% endblock %}
